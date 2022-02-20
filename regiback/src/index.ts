@@ -1,4 +1,4 @@
-import { Server } from "socket.io";
+import { Server, Socket } from "socket.io";
 
 const io = new Server({
   /* options */
@@ -11,6 +11,14 @@ io.on("connection", (socket) => {
     message: "you have connected"
   })
 });
+
+io.on("request-game-create", (socket) => {
+
+})
+
+io.on("request-game-join", (socket) => {
+
+})
 
 let port_num = Number(process.env.PORT_NUM) || 3000
 
