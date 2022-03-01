@@ -1,17 +1,33 @@
 
+
+
+/**
+ * Class for containing game state
+ */
 class CardGame {
   gameId: string
-  players: string[]
+  players: Player[]
 
   constructor (socketRoomId: string) {
     this.gameId = socketRoomId
     this.players = []
   }
 
-  addPlayer(playerId: string) {
-    this.players.push(playerId)
+  addNewPlayer(playerId: string) {
+    this.players.push(new Player(playerId))
   }
 
+}
+
+/**
+ * This is a bit overkill, but might be useful in the future
+**/
+class Player {
+  playerId: string
+
+  constructor (playerId: string) {
+    this.playerId = playerId
+  }
 }
 
 export { CardGame }

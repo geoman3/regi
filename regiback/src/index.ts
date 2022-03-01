@@ -20,7 +20,7 @@ io.on("request-game-create", (socket: Socket) => {
   let gameId = uuidv4()
   let newGame = new CardGame(gameId)
 
-  newGame.addPlayer(socket.id)
+  newGame.addNewPlayer(socket.id)
   socket.join(gameId)
   games.push(newGame)
 
