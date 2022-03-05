@@ -3,6 +3,7 @@ import {v4 as uuidv4 } from "uuid"
 
 import { CardGame } from "./game-state";
 
+
 const io = new Server({
   /* options */
 });
@@ -20,7 +21,7 @@ io.on("request-game-create", (socket: Socket) => {
   let gameId = uuidv4()
   let newGame = new CardGame(gameId)
 
-  newGame.addNewPlayer(socket.id)
+  newGame.addPlayer(socket.id)
   socket.join(gameId)
   games.push(newGame)
 
@@ -34,7 +35,6 @@ io.on("request-game-join", (socket: Socket) => {
 io.on("request-game-leave", (socket: Socket) => {
 
 })
-
 
 // Here we just make sure our rooms and cardgames state agree with each other
 io.of("/").adapter.on("create-room", (room) => {
