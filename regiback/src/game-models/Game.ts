@@ -1,9 +1,11 @@
+import { Card, Suit, FaceValue } from "./Card"
+import { Player } from "./Player"
 
 /**
  * Class for containing game state
  * test
  */
-class CardGame {
+export class CardGame {
   gameId: string // socket id from socket io
   players: Player[] // array of Players currently in game
   playerTurn: number // refers to who's turn it is
@@ -39,46 +41,16 @@ class CardGame {
   initGame() {
     // Check that enough players are present
     if (this.players.length != 4) { return false }
-    for (var suit of ["spades", "hearts", "clubs", "diamonds"]) {
-
-    }
+    this.deck =[]
+    Object.values(Suit).forEach(suit => { 
+      for (let faceValue in Object.values(FaceValue)) {
+        console.log(`suit: ${suit}, face: ${faceValue}`)
+        this.deck.push(new Card(suit, faceValue))
+      }
+    })
+    // remove cards to get 43 card deck for standard game of 500
+    this.deck = this.deck.filter(card => {
+      
+    })
   }
 }
-
-/**
- * This is a bit overkill, but might be useful in the future
-**/
-class Player {
-  playerId: string
-  cards: Card[]
-
-  constructor (playerId: string) {
-    this.playerId = playerId
-    this.cards = []
-  }
-}
-
-export type CardValue = "4" | "5" | "6" | "7" | "8" | "9" | "10" | "jack" | "queen" | "king" | "joker"
-export type Suit = "spades" | "hearts" | "clubs" | "diamonds"
-export type Colour = "red" | "black"
-
-class Card {
-  suit: Suit
-  colour: Colour
-  value: string
-
-  constructor(suit: Suit, value: string) {
-    this.suit = suit
-    this.value = value
-
-    let colourMap : Record<Suit, Colour> = {
-      "spades": "black",
-      "hearts": "red",
-      "diamonds": "red",
-      "clubs": "black"
-    }
-    this.colour = colourMap[suit]
-  }
-}
-
-export { CardGame }

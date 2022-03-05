@@ -1,7 +1,7 @@
 import { Server, Socket } from "socket.io";
 import {v4 as uuidv4 } from "uuid"
 
-import { CardGame } from "./game-state";
+import { CardGame } from "./game-models/Game";
 
 
 const io = new Server({
@@ -25,11 +25,11 @@ io.on("request-game-create", (socket: Socket) => {
   socket.join(gameId)
   games.push(newGame)
 
-  socket.emit("successful-game-create", {gameId: gameId})
+  socket.emit("successful-game-create", { gameId: gameId })
 })
 
 io.on("request-game-join", (socket: Socket) => {
-
+  
 })
 
 io.on("request-game-leave", (socket: Socket) => {
