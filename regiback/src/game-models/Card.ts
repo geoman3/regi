@@ -39,4 +39,4 @@ class Card {
   }
 }
 
-export { Card, FaceValue, Suit }
+export { Card, FaceValue, Suit, Colour }

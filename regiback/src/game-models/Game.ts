@@ -1,11 +1,12 @@
-import { Card, Suit, FaceValue } from "./Card"
+import { Card, Suit, FaceValue, Colour } from "./Card"
 import { Player } from "./Player"
+
 
 /**
  * Class for containing game state
  * test
  */
-export class CardGame {
+class CardGame {
   gameId: string // socket id from socket io
   players: Player[] // array of Players currently in game
   playerTurn: number // refers to who's turn it is
@@ -38,19 +39,38 @@ export class CardGame {
   /**
    * sets / resets the state of the game to a new game
    */
-  initGame() {
+  initRound() {
     // Check that enough players are present
     if (this.players.length != 4) { return false }
-    this.deck =[]
-    Object.values(Suit).forEach(suit => { 
-      for (let faceValue in Object.values(FaceValue)) {
-        console.log(`suit: ${suit}, face: ${faceValue}`)
-        this.deck.push(new Card(suit, faceValue))
-      }
+    let newDeck: Card[] =[]
+    Object.values(Suit).forEach((suit) => {
+      Object.values(FaceValue).forEach((faceValue) => {
+        // This horrible nonsense is to get around a ts compile error where .forEach assigning type: { Suit | string } to suit
+        // let me know if theres a better way to do this
+        let anySuit: Suit = suit as any as Suit
+        let anyFaceValue: FaceValue = faceValue as any as FaceValue
+        newDeck.push(new Card(anySuit, anyFaceValue))
+      })
     })
     // remove cards to get 43 card deck for standard game of 500
-    this.deck = this.deck.filter(card => {
-      
+    // remove 2's, 3's, black 4's, keep 1 joker
+    newDeck = newDeck.filter(card => {
+      (card.faceValue in [ FaceValue.two, FaceValue.three ] === false) &&
+      ((card.faceValue === FaceValue.four && card.colour === Colour.black) === false) &&
+      (card.faceValue === FaceValue.joker && card.suit != Suit.hearts) === false
     })
+    // shuffle - fisher yates alg
+    for (let i = newDeck.length - 1; i > 0; i--) {
+      let j = Math.floor(Math.random() * i)
+      let temp = newDeck[i]; newDeck[i] = newDeck[j]; newDeck[j] = temp 
+    }
+    // Deal
+    this.players.forEach((player, idx) => {
+      player.hand = newDeck.slice(idx * 10, (idx+1) * 10)
+    })
+    this.deck = newDeck.slice(-3)
+    return true
   }
 }
+
+export { CardGame }
