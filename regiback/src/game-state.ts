@@ -1,6 +1,7 @@
 
 /**
  * Class for containing game state
+ * test
  */
 class CardGame {
   gameId: string // socket id from socket io
