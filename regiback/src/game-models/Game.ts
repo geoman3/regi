@@ -3,20 +3,39 @@ import { Player } from "./Player"
 
 
 /**
- * Class for containing game state
- * test
+ * Class for containing game logic + state
+ * Rules taken from here: https://gathertogethergames.com/500
  */
 class CardGame {
   gameId: string // socket id from socket io
   players: Player[] // array of Players currently in game
-  playerTurn: number // refers to who's turn it is
+
+  activePlayer: 0 | 1 | 2 | 3 // refers to who's turn it is
   deck: Card[]
+  phase: "bidding" | "tricking"
+
+  currentBid: number | null
+  trumpSuit: Suit | null
+
+  teams = [
+    {
+      score: 0,
+      players: [0, 2]
+    },
+    {
+      score: 0,
+      players: [1, 3]
+    }
+  ]
 
   constructor (socketRoomId: string) {
     this.gameId = socketRoomId
     this.players = []
     this.deck = []
-    this.playerTurn = 0
+    this.activePlayer = 0
+    this.phase = "bidding"
+    this.currentBid = null
+    this.trumpSuit = null
   }
 
   addPlayer(playerId: string) {
@@ -37,7 +56,7 @@ class CardGame {
   }
 
   /**
-   * sets / resets the state of the game to a new game
+   * sets / resets the state of the game to a new round
    */
   initRound() {
     // Check that enough players are present
@@ -47,8 +66,7 @@ class CardGame {
       Object.values(FaceValue).forEach((faceValue) => {
         // This horrible nonsense is to get around a ts compile error where .forEach assigning type: { Suit | string } to suit
         // let me know if theres a better way to do this
-        let anySuit: Suit = suit as any as Suit
-        let anyFaceValue: FaceValue = faceValue as any as FaceValue
+        let anySuit: Suit = suit as any as Suit; let anyFaceValue: FaceValue = faceValue as any as FaceValue
         newDeck.push(new Card(anySuit, anyFaceValue))
       })
     })
@@ -70,6 +88,22 @@ class CardGame {
     })
     this.deck = newDeck.slice(-3)
     return true
+  }
+
+  placeBid(playerId: string, size: number | null, suit: Suit | null) {
+
+  }
+
+  playTrick(playerId: string, card: Card) {
+
+  }
+
+  resolveTrick() {
+
+  }
+
+  scoreRound() {
+
   }
 }
 
