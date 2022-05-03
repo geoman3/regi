@@ -1,4 +1,5 @@
 enum FaceValue {
+  ace,
   two,
   three,
   four,
@@ -11,7 +12,6 @@ enum FaceValue {
   jack,
   queen,
   king,
-  ace,
   joker
 }
 

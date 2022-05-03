@@ -26,7 +26,7 @@ class CardGame {
       console.log(`New player for game: ${this.gameId}, player id: ${playerId}, num players: ${this.players.length}`)
       return true
     } else {
-      console.log(`4 or more players already in game: ${this.gameId}`)
+      console.log(`${this.maxPlayers} or more players already in game: ${this.gameId}`)
       return false
     }
   }
@@ -35,6 +35,15 @@ class CardGame {
     this.players = this.players.filter((player) => {
       player.playerId != playerId
     })
+  }
+
+  // fisher yates alg
+  shuffle(deck: Card[]) {
+    for (let i = deck.length - 1; i > 0; i--) {
+      let j = Math.floor(Math.random() * i)
+      let temp = deck[i]; deck[i] = deck[j]; deck[j] = temp
+    }
+    return deck
   }
 
   genNewDeck() {
@@ -52,11 +61,7 @@ class CardGame {
     newDeck = newDeck.filter(card => {
       (card.faceValue === FaceValue.joker && (card.suit in [Suit.hearts, Suit.spades])) === false
     })
-    // shuffle - fisher yates alg
-    for (let i = newDeck.length - 1; i > 0; i--) {
-      let j = Math.floor(Math.random() * i)
-      let temp = newDeck[i]; newDeck[i] = newDeck[j]; newDeck[j] = temp 
-    }
+    newDeck = this.shuffle(newDeck)
     
     return newDeck
   }
